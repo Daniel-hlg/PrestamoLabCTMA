@@ -16,6 +16,23 @@ class InMemoryPrestamoRepository : PrestamoRepository {
     override fun obtenerSolicitud(id: Int): SolicitudPrestamo? = solicitudes.find { it.id == id }
 
     override fun crearSolicitud(solicitud: SolicitudPrestamo): Result<Unit> {
+        // Validaciones de negocio
+        if (solicitud.ambienteDestino.isBlank()) {
+            return Result.failure(Exception("El destino es obligatorio"))
+        }
+        if (solicitud.proposito.length < 10 || solicitud.proposito.length > 180) {
+            return Result.failure(Exception("El propósito debe tener entre 10 y 180 caracteres"))
+        }
+        if (solicitud.duracionHoras < 1 || solicitud.duracionHoras > 8) {
+            return Result.failure(Exception("La duración debe estar entre 1 y 8 horas"))
+        }
+
+        // Verificar si ya existe una solicitud activa para este equipo
+        val solicitudDuplicada = solicitudes.any { it.equipoId == solicitud.equipoId && it.estado == EstadoSolicitud.SOLICITADA }
+        if (solicitudDuplicada) {
+            return Result.failure(Exception("Ya existe una solicitud activa para este equipo"))
+        }
+
         val equipo = obtenerEquipo(solicitud.equipoId)
         return if (equipo != null && equipo.estado == EstadoEquipo.DISPONIBLE) {
             solicitudes.add(solicitud)
