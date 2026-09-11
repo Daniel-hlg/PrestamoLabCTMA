@@ -478,4 +478,4 @@ Consultar la solicitud desde Mis préstamos.
 
 Estado: En desarrollo / primer incremento funcional.
 
-El flujo principal de consulta de equipos, registro de solicitudes, consulta de préstamos y cancelación se encuentra implementado y probado mediante el emulador Android...
+El flujo principal de consulta de equipos, registro de solicitudes, consulta de préstamos y cancelación se encuentra implementado y probado mediante el emulador Android.
